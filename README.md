@@ -1,32 +1,51 @@
-# 06 - Integration Platform (HubSpot + QuickBooks + Slack)
+# 06 - Integration Platform (HubSpot + QuickBooks + Slack-style Alerts)
 
-## Positioning
-Integration hub that synchronizes CRM, finance, and team communication workflows.
+This project implements an integration core with operational controls expected by commercial teams.
 
-## Target market
-- Service businesses with sales and finance handoff issues
-- Teams with manual reconciliation between systems
+## Delivered capabilities
 
-## MVP scope
-- Bidirectional sync for key customer and invoice entities
-- Event-driven webhook processing
-- Retry and dead-letter handling
-- Audit log for integration events
-- Slack notifications for failures and approvals
+- webhook ingestion for HubSpot and QuickBooks
+- HMAC signature validation
+- event idempotency control
+- canonical customer sync
+- invoice sync with failure detection
+- alert log stream for failed events (Slack-style operational notifications)
+- retry endpoint with payload patch support
 
-## Suggested stack
-- Backend: Node.js / Python
-- Messaging: SQS / RabbitMQ
-- Storage: PostgreSQL
-- Integration framework: custom adapters or iPaaS connectors
+## Business positioning
 
-## Commercial packaging
-- Starter: one-way sync with one system pair
-- Growth: bidirectional sync and alerting
-- Enterprise: custom mappings, SLAs, and support runbooks
+1. **Starter** - single integration flow with webhook reliability
+2. **Growth** - multi-system sync + retries + operational alerts
+3. **Enterprise** - mapping governance, SLAs, and support runbooks
 
-## Week 1 execution
-- [ ] Define canonical data model
-- [ ] Implement HubSpot and QuickBooks adapters
-- [ ] Build webhook receiver with signature verification
-- [ ] Add Slack alert channel
+## API highlights
+
+- `POST /webhooks/hubspot`
+- `POST /webhooks/quickbooks`
+- `GET /events`
+- `POST /events/{event_id}/retry`
+- `GET /alerts`
+- `GET /sync/summary`
+- `POST /reset`
+
+## Local setup
+
+```bash
+cd projects/06-integration-hubspot-quickbooks-slack
+pip3 install -r requirements.txt
+uvicorn app.main:app --reload --port 8005
+```
+
+## Run tests
+
+```bash
+cd projects/06-integration-hubspot-quickbooks-slack
+pytest -q
+```
+
+## Docker
+
+```bash
+cd projects/06-integration-hubspot-quickbooks-slack
+docker compose up --build
+```

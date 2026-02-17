@@ -1,0 +1,11 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8005:8000"
+    environment:
+      DATABASE_URL: "sqlite:////app/data/app.db"
+      HUBSPOT_WEBHOOK_SECRET: "change-hubspot-secret"
+      QUICKBOOKS_WEBHOOK_SECRET: "change-quickbooks-secret"
+    volumes:
+      - ./data:/app/data
